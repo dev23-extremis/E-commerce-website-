@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style2.css">
+    <title>User Login & Registration Portal</title>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>E-commerce Website</h1>
+            <h2>Login & Registration Portal</h2>
+        </header>
+
+        <main>
+            <!-- Registration Form -->
+            <section>
+                <h3>Register</h3>
+                <form id="registerForm">
+                    <label for="regUsername">Username:</label>
+                    <input type="text" id="regUsername" placeholder="Enter Username" required>
+
+                    <label for="regPassword">Password:</label>
+                    <input type="password" id="regPassword" placeholder="Enter Password" required>
+
+                    <button type="submit">Register</button>
+                </form>
+            </section>
+
+            <!-- Login Form -->
+            <section>
+                <h3>Login</h3>
+                <form id="loginForm">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" placeholder="Enter Username" required>
+
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" placeholder="Enter Password" required>
+
+                    <button type="submit">Login</button>
+                </form>
+            </section>
+        </main>
+
+        <footer>
+            <p>
+                Copyright &copy; <b>Coriozo - Nov Batch 2024</b>
+            </p>
+        </footer>
+    </div>
+
+    <script src="script3.js"></script>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
+            e.preventDefault(); 
+    
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+    
+
+            sessionStorage.setItem('username', username);
+    
+            window.location.href = 'show.html';
+        });
+    </script>
+    
+</body>
+
+</html>

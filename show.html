@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products List</title>
+    <link rel="stylesheet" href="style2.css">
+</head>
+
+<body>
+    <div id="header" >
+        <!-- Show the logged-in username -->
+        <span id="userWelcome"></span>
+
+        <!-- Logout button -->
+        <button id="logoutButton" class="btn btn-danger">Logout</button>
+    </div>
+
+    <div class="container">
+        <h1>Product List</h1>
+
+        <!-- History Button to View Order History -->
+        <button id="historyButton">View Order History</button>
+
+        <!-- Container to Display Order History -->
+        <div id="historyContainer"></div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Image</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="productTable"></tbody>
+        </table>
+
+        <!-- Product View Modal -->
+        <div id="viewProductModal" class="modal">
+            <div class="modal-content">
+                <span id="closeModal" class="close">&times;</span>
+                <h2 id="modalProductName"></h2>
+                <img id="modalProductImage" alt="Product Image" width="200">
+                <p id="modalProductDescription"></p>
+                <p><strong>Price:</strong> <span id="modalProductPrice"></span></p>
+                <p><strong>Status:</strong> <span id="modalProductStatus"></span></p>
+            </div>
+        </div>
+
+        <!-- Add to Cart Modal -->
+        <div id="cartModal" class="modal">
+            <div class="modal-content">
+                <h4>Enter Your Details</h4><span id="closeCartModal" class="close">&times;</span>
+                <form id="cartForm">
+                    <input type="text" id="userName" placeholder="Your Name" required>
+                    <input type="email" id="userEmail" placeholder="Your Email" required>
+                    <input type="text" id="userAddress" placeholder="Your Address" required>
+                    <input type="tel" id="userPhone" placeholder="Your Phone Number" required>
+                    <button type="submit" class="btn">Place Order</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let products = [];
+        let orders = [];
+        const BASE_URL = 'http://localhost:5000';
+
+        // Fetch and render the product list
+        function renderProductList() {
+            const productTable = document.getElementById('productTable');
+            productTable.innerHTML = ''; // Clear the table
+
+            products.forEach((product, index) => {
+                const row = document.createElement('tr');
+
+                row.innerHTML = `
+                    <td>${product.name}</td>
+                    <td>${product.description}</td>
+                    <td><img src="${product.image}" alt="Product Image" width="50" height="50"></td>
+                    <td>₹${product.price}</td>
+                    <td>${product.status}</td>
+                    <td>
+                        <button class="btn btn-info" onclick="viewProduct(${index})">View</button>
+                        <button class="btn btn-primary" onclick="addToCart(${index})">Add to Cart</button>
+                    </td>
+                `;
+                productTable.appendChild(row);
+            });
+        }
+
+        // Fetch products from the server
+        async function fetchProducts() {
+            try {
+                const response = await fetch(`${BASE_URL}/products`);
+                products = await response.json();
+                renderProductList();
+            } catch (error) {
+                console.error("Error fetching products:", error);
+            }
+        }
+
+        // Fetch orders for the logged-in user
+        async function fetchOrders() {
+            try {
+                const username = sessionStorage.getItem('username');
+
+                if (!username) {
+                    alert("You need to log in to view your order history.");
+                    return;
+                }
+
+                const response = await fetch(`${BASE_URL}/orders`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch orders');
+                }
+
+                const rawOrders = await response.json();
+
+                const userOrders = rawOrders.filter(order => order.user === username);
+
+                if (products.length === 0) {
+                    await fetchProducts();
+                }
+
+                orders = userOrders.map(order => {
+                    const product = products.find(p => p._id === order.productId) || {};
+
+                    return {
+                        ...order,
+                        product,
+                    };
+                });
+
+                renderOrderList();
+            } catch (error) {
+                console.error("Error fetching orders:", error);
+            }
+        }
+
+        // Render the order list in the history container
+        function renderOrderList() {
+            const historyContainer = document.getElementById('historyContainer');
+            historyContainer.innerHTML = '';
+
+            if (orders.length === 0) {
+                historyContainer.innerHTML = '<p>No order history found.</p>';
+                return;
+            }
+
+            const table = document.createElement('table');
+            const tableHeader = document.createElement('thead');
+            tableHeader.innerHTML = `
+                <tr>
+                    <th>Product ID</th>
+                    <th>User</th>
+                    <th>Address</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Price</th>
+                    <th>Description</th>
+                    <th>Image</th>
+                </tr>
+            `;
+            table.appendChild(tableHeader);
+
+            const tableBody = document.createElement('tbody');
+            orders.forEach(order => {
+                const { product } = order;
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${order.productId}</td>
+                    <td>${order.user || "Unknown User"}</td>
+                    <td>${order.address || "No Address Provided"}</td>
+                    <td>${order.email || "No Email"}</td>
+                    <td>${order.phone || "No Phone"}</td>
+                    <td>₹ ${product.price || "N/A"}</td>
+                    <td>${product.description || "No Description"}</td>
+                    <td><img src="${product.image || 'placeholder.jpg'}" alt="Product Image" width="50" height="50"></td>
+                `;
+                tableBody.appendChild(row);
+            });
+
+            table.appendChild(tableBody);
+            historyContainer.appendChild(table);
+        }
+
+        // Handle History Button Click
+        document.getElementById('historyButton').addEventListener('click', async function () {
+            const historyContainer = document.getElementById('historyContainer');
+
+            if (historyContainer.style.display === 'none' || historyContainer.style.display === '') {
+                historyContainer.style.display = 'block';
+                await fetchOrders();
+            } else {
+                historyContainer.style.display = 'none';
+            }
+        });
+        // View product details in a modal
+        function viewProduct(index) {
+            const product = products[index];
+            document.getElementById('modalProductName').textContent = product.name;
+            document.getElementById('modalProductDescription').textContent = product.description;
+            document.getElementById('modalProductPrice').textContent = `₹${product.price}`;
+            document.getElementById('modalProductStatus').textContent = product.status;
+            document.getElementById('modalProductImage').src = product.image;
+            document.getElementById('modalProductImage').style.width = '850px'; 
+            document.getElementById('modalProductImage').style.height = '400px'; 
+
+            const modalPrice = document.getElementById('modalProductPrice');
+            modalPrice.style.fontSize = '20px'; 
+            modalPrice.style.fontWeight = 'bold'; 
+
+            const modal = document.getElementById('viewProductModal');
+            modal.style.display = 'block';
+
+            document.getElementById('closeModal').onclick = () => {
+                modal.style.display = 'none';
+            };
+
+            window.onclick = (event) => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            };
+        }
+
+        // Close the view product modal
+        document.getElementById('closeModal').addEventListener('click', function () {
+            document.getElementById('viewProductModal').style.display = 'none';
+        });
+
+        // Add product to cart and show the cart modal
+        function addToCart(index) {
+            const product = products[index];
+            const cartForm = document.getElementById('cartForm');
+
+            const newCartForm = cartForm.cloneNode(true);
+            cartForm.parentNode.replaceChild(newCartForm, cartForm);
+
+            newCartForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                const userName = document.getElementById('userName').value;
+                const userEmail = document.getElementById('userEmail').value;
+                const userAddress = document.getElementById('userAddress').value;
+                const userPhone = document.getElementById('userPhone').value;
+
+                const order = {
+                    user: userName,
+                    productId: product._id,
+                    name: product.name,
+                    address: userAddress,
+                    email: userEmail,
+                    phone: userPhone,
+                };
+
+                // Place the order
+                fetch(`${BASE_URL}/order`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(order)
+                }).then(response => {
+                    if (!response.ok) throw new Error('Failed to place order');
+                    return response.json();
+                }).then(data => {
+                    alert(data.message || "Order placed successfully!");
+                    closeCartModal();
+                }).catch(error => {
+                    console.error("Error placing order:", error);
+                    alert("Failed to place order. Please try again.");
+                });
+            });
+
+            document.getElementById('cartModal').style.display = 'flex';
+            // Close the modal when the "X" is clicked
+            const closeCartButton = document.getElementById('closeCartModal'); 
+            if (closeCartButton) {
+                closeCartButton.onclick = () => {
+                    cartModal.style.display = 'none';
+                };
+            }
+
+            // Close the modal when clicking outside of it
+            window.onclick = (event) => {
+                if (event.target === cartModal) {
+                    cartModal.style.display = 'none';
+                }
+            };
+
+        }
+
+        // Close the cart modal function
+        function closeCartModal() {
+            const cartModal = document.getElementById('cartModal');
+            cartModal.style.display = 'none';
+        }
+
+        // Fetch the username from sessionStorage and display it
+        const username = sessionStorage.getItem('username');
+        if (username) {
+            document.getElementById('userWelcome').textContent = `Username: ${username}`;
+        } else {
+            document.getElementById('userWelcome').textContent = 'Username: Unknown';
+        }
+
+        fetchProducts();
+
+        // Logout button event listener
+        document.getElementById('logoutButton').addEventListener('click', function () {
+            sessionStorage.removeItem('username');
+            window.location.href = 'index1.html'; 
+        });
+    </script>
+</body>
+
+</html>

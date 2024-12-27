@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style1.css">
+    <title>Product Details</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <ul>
+            <li><button id="productsNav">Products</button></li>
+            <li><button id="usersNav">Users</button></li>
+            <li><button id="ordersNav">Orders</button></li>
+        </ul>
+        <button id="logoutButton" class="btn btn-danger">Logout</button>
+    </nav>
+
+    <div class="container">
+        <header>
+            <!-- <h1>Product Details</h1> -->
+        </header <main>
+        <!-- Products Section -->
+        <section id="productSection">
+            <h2>Product List</h2>
+            <!-- <h2>Product List</h2> -->
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Product ID</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Image</th>
+                        <th>Price (in INR)</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="productTable">
+                    <!-- Example Product Row -->
+                    <tr>
+                        <td>1</td>
+                        <td>Sample Product</td>
+                        <td>Product Description</td>
+                        <td><img src="sample.jpg" alt="Product Image" style="max-width: 50px; height: auto;"></td>
+                        <td>1000</td>
+                        <td>Available</td>
+                        <td>
+                            <button class="view-btn" title="View">
+                                <i class="fas fa-eye"></i> <!-- View Icon -->
+                            </button>
+                            <button class="edit-btn" title="Edit">
+                                <i class="fas fa-edit"></i> <!-- Edit Icon -->
+                            </button>
+                            <button class="delete-btn" title="Delete">
+                                <i class="fas fa-trash-alt"></i> <!-- Delete Icon -->
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="form-container">
+                <h2>Add New Product</h2>
+                <form id="addProductForm" enctype="multipart/form-data">
+                    <input type="text" id="productName" name="name" placeholder="Product Name" required>
+                    <input type="text" id="productDescription" name="description" placeholder="Product Description"required>
+                    <input type="number" id="productPrice" name="price" placeholder="Price (in INR)" required>
+                    <label for="productImage">Image:</label>
+                    <input type="file" id="productImage" name="image" accept="image/*" required>
+
+                    <!-- Add Product Button -->
+                    <button id="addProductButton" class="btn btn-primary" type = "submit" >Add Product</button>
+
+                    <!-- Update Product Button (Initially Hidden) -->
+                    <button id="updateProductButton" class="btn btn-success" type = "submit" >Update Product</button>
+
+                </form>
+            </div>
+        </section>
+
+        <!-- User Section -->
+        <section id="usersSection" >
+            <h2>Users List</h2>
+
+            <!-- Add/Update User Form -->
+            <form id="addUserForm">
+                <label for="username">Username:</label>
+                <input type="text" id="username" required>
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" required>
+
+                <!-- Show Password Toggle -->
+                <label>
+                    <input type="checkbox" id="showPasswordToggle"> Show Password
+                </label>
+
+                <!-- Add User Button -->
+                <button id="addUserButton" class="btn btn-primary" type = "submit">Add User</button>
+
+                <!-- Update User Button -->
+                <button id="updateUserButton" class="btn btn-success" type = "submit" >Update User</button>
+
+                <!-- Cancel Button -->
+                <button id="cancelEditUserButton" type="button" class="btn btn-secondary">Cancel</button>
+            </form>
+
+            <!-- Users Table -->
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Password</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="userTable">
+                    <!-- Example User Row -->
+                    <tr>
+                        <td>exampleUser</td>
+                        <td>password123</td>
+                        <td>
+                            <button class="edit-btn" title="Edit">
+                                <i class="fas fa-edit"></i> <!-- Edit Icon -->
+                            </button>
+                            <button class="delete-btn" title="Delete">
+                                <i class="fas fa-trash-alt"></i> <!-- Delete Icon -->
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Orders Section -->
+        <section id="ordersSection" >
+            <h2>Orders</h2>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Address</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Price</th>
+                        <th>Product Description</th>
+                        <th>Image</th>
+                        <th>Actions</th> <!-- Added column for actions -->
+                    </tr>
+                </thead>
+                <tbody id="orderTable">
+                    <!-- Example Order Row -->
+                    <tr>
+                        <td>exampleUser</td>
+                        <td>123 Street, City</td>
+                        <td>user@example.com</td>
+                        <td>1234567890</td>
+                        <td>₹500</td>
+                        <td>Sample Product Description</td>
+                        <td><img src="sample.jpg" alt="Product Image" style="max-width: 50px; height: auto;"></td>
+                        <td>
+                            <button class="delete-btn" title="Delete">
+                                <i class="fas fa-trash-alt"></i> <!-- Delete Icon -->
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+
+        <!-- View Product Modal -->
+        <div id="viewProductModal" class="modal">
+            <div class="modal-content">
+                <span class="close" id="closeModal">&times;</span>
+                <h2 id="modalProductName"></h2>
+                <img id="modalProductImage" src="" alt="Product Image" style="max-width: 100%; height: auto;">
+                <p id="modalProductDescription"></p>
+                <p><strong>Price:</strong> ₹ <span id="modalProductPrice"></span></p>
+                <p><strong>Status:</strong> <span id="modalProductStatus"></span></p>
+            </div>
+        </div>
+        </main>
+    </div>
+
+    <script src="script2.js"></script>
+
+</body>
+
+</html>

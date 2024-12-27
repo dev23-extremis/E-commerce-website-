@@ -1,0 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: "Poppins", sans-serif;
+    box-sizing: border-box; 
+}
+
+.container {
+    width: 380px;
+    background: linear-gradient(135deg, #a3bffa, #627bff); 
+    border-radius: 12px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1); 
+    padding: 20px;
+    text-align: center;
+}
+
+body {
+    background: linear-gradient(120deg, #eceff1, #f5f7fa); 
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+h1 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 15px;
+}
+h2 {
+    font-size: 19px;
+    font-weight: 300;
+    color: #ffffff;
+    margin-bottom: 15px;
+}
+
+form {
+    width: 100%;
+    margin: 0 auto;
+}
+
+label {
+    display: block;
+    margin-top: 20px;
+    font-size: 16px;
+    color: #ffffff;
+    font-weight: 500;
+    text-align: left;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin-top: 5px;
+    font-size: 14px;
+    background: #f9f9f9;
+    transition: border 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    border: 1px solid #627bff;
+    outline: none;
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin-top: 5px;
+    background: #f9f9f9;
+    font-size: 14px;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 30px;
+    border: none;
+    border-radius: 8px;
+    background: #627bff;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+button:hover {
+    background: #4c63d9;
+    transform: translateY(-2px); 
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+p {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+    color: #627bff;
+    font-weight: 500;
+}
+
+.container,
+input,
+select,
+button,
+p {
+    transition: all 0.3s ease;
+    color: #ffffff;
+}
