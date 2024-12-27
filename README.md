@@ -3,9 +3,6 @@ Using CRUD application approach this e-commerce website is created
 
 📁 Folder Structure:
 
-![file_str](https://github.com/user-attachments/assets/2c18369c-29fd-4af8-8f3f-fdf2c0c0d578)
-
-
 major- e-commerce website/ # major- e-commerce website is the main application folder
 
 models/ Product.js: Product model for the database. Database Used: MongoDB.
@@ -37,4 +34,7 @@ Project metadata, dependencies, and npm scripts. package-lock.json
 Lock file to ensure consistent package installation. server.js
 
 Main backend server file that handles logic and routes. node_modules/
+
+**Screenshots:**
+
 
