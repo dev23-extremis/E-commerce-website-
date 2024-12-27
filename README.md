@@ -1,7 +1,9 @@
 # E-commerce-website-
 Using CRUD application approach this e-commerce website is created
 📁 Folder Structure:
+
 ![file_str](https://github.com/user-attachments/assets/2c18369c-29fd-4af8-8f3f-fdf2c0c0d578)
+
 
 major- e-commerce website/ # major- e-commerce website is the main application folder
 
