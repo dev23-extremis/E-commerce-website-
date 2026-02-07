@@ -35,6 +35,5 @@ Lock file to ensure consistent package installation. server.js
 
 Main backend server file that handles logic and routes. node_modules/
 
-**Screenshots:**
 
 
